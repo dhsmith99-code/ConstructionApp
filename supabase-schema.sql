@@ -84,6 +84,27 @@ create table if not exists schedule_tasks (
   created_date timestamptz default now()
 );
 
+-- Job Files
+create table if not exists job_files (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  category text default 'other',
+  file_url text,
+  description text,
+  project_id uuid references projects(id) on delete cascade,
+  created_date timestamptz default now()
+);
+
+-- Sales Lead columns on projects
+alter table projects
+  add column if not exists salesperson text,
+  add column if not exists lead_source text,
+  add column if not exists lead_status text default 'prospect',
+  add column if not exists estimated_value text,
+  add column if not exists contact_phone text,
+  add column if not exists contact_email text,
+  add column if not exists lead_notes text;
+
 -- Disable Row Level Security (app has no auth layer)
 alter table projects disable row level security;
 alter table photos disable row level security;
@@ -92,3 +113,4 @@ alter table plans disable row level security;
 alter table purchase_orders disable row level security;
 alter table selections disable row level security;
 alter table schedule_tasks disable row level security;
+alter table job_files disable row level security;

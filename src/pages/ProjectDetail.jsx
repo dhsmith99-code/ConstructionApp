@@ -8,6 +8,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
   ArrowLeft, Pencil, Trash2, Plus, Camera, ClipboardCheck,
   MapPin, Calendar, User, FileText, ShoppingCart, Palette, CalendarDays,
+  TrendingUp, FolderOpen,
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import PhotoGrid from '@/components/photos/PhotoGrid';
@@ -20,6 +21,8 @@ import PlansTab from '@/components/plans/PlansTab';
 import PurchaseOrdersTab from '@/components/purchase-orders/PurchaseOrdersTab';
 import SelectionsTab from '@/components/selections/SelectionsTab';
 import ScheduleTab from '@/components/schedule/ScheduleTab';
+import SalesLeadTab from '@/components/sales/SalesLeadTab';
+import JobFilesTab from '@/components/job-files/JobFilesTab';
 
 const STATUS_COLORS = {
   active: 'bg-emerald-100 text-emerald-800',
@@ -165,8 +168,10 @@ export default function ProjectDetail() {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="photos">
+      <Tabs defaultValue="sales-lead">
         <TabsList className="mb-6 flex-wrap h-auto gap-1">
+          <TabsTrigger value="sales-lead"><TrendingUp className="w-3.5 h-3.5 mr-1.5" />Sales Lead</TabsTrigger>
+          <TabsTrigger value="job-files"><FolderOpen className="w-3.5 h-3.5 mr-1.5" />Job Files</TabsTrigger>
           <TabsTrigger value="photos"><Camera className="w-3.5 h-3.5 mr-1.5" />Photos</TabsTrigger>
           <TabsTrigger value="punch"><ClipboardCheck className="w-3.5 h-3.5 mr-1.5" />Punch List</TabsTrigger>
           <TabsTrigger value="plans"><FileText className="w-3.5 h-3.5 mr-1.5" />Plans</TabsTrigger>
@@ -174,6 +179,14 @@ export default function ProjectDetail() {
           <TabsTrigger value="selections"><Palette className="w-3.5 h-3.5 mr-1.5" />Selections</TabsTrigger>
           <TabsTrigger value="schedule"><CalendarDays className="w-3.5 h-3.5 mr-1.5" />Schedule</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="sales-lead">
+          <SalesLeadTab project={project} onSaved={refreshProject} />
+        </TabsContent>
+
+        <TabsContent value="job-files">
+          <JobFilesTab projectId={id} />
+        </TabsContent>
 
         {/* Photos Tab */}
         <TabsContent value="photos">
