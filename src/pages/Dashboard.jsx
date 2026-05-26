@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { base44 } from '@/api/base44Client';
+import { db as base44 } from '@/api/supabaseClient';
 import PageHeader from '@/components/PageHeader';
 import { FolderKanban, Camera, ClipboardCheck, ArrowRight } from 'lucide-react';
 

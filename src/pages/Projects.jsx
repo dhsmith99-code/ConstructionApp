@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { db as base44 } from '@/api/supabaseClient';
 import PageHeader from '@/components/PageHeader';
 import ProjectCard from '@/components/projects/ProjectCard';
 import ProjectFormDialog from '@/components/projects/ProjectFormDialog';

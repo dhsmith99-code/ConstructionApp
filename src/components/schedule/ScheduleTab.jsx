@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
+import { db as base44 } from '@/api/supabaseClient';
 import { Button } from '@/components/ui/button';
 import EmptyState from '@/components/EmptyState';
 import { CalendarDays, Plus, Trash2, Pencil } from 'lucide-react';

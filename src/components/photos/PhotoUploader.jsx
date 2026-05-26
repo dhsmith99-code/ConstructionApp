@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
+import { db as base44 } from '@/api/supabaseClient';
 import {
   Dialog,
   DialogContent,
