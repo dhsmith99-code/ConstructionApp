@@ -8,7 +8,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import {
   ArrowLeft, Pencil, Trash2, Plus, Camera, ClipboardCheck,
   MapPin, Calendar, User, FileText, ShoppingCart, Palette, CalendarDays,
-  Paperclip, TrendingUp, DollarSign,
+  TrendingUp, FolderOpen,
 } from 'lucide-react';
 import { format, parseISO } from 'date-fns';
 import PhotoGrid from '@/components/photos/PhotoGrid';
@@ -21,6 +21,7 @@ import PlansTab from '@/components/plans/PlansTab';
 import PurchaseOrdersTab from '@/components/purchase-orders/PurchaseOrdersTab';
 import SelectionsTab from '@/components/selections/SelectionsTab';
 import ScheduleTab from '@/components/schedule/ScheduleTab';
+import SalesLeadTab from '@/components/sales/SalesLeadTab';
 import JobFilesTab from '@/components/job-files/JobFilesTab';
 
 const STATUS_COLORS = {
@@ -151,35 +152,6 @@ export default function ProjectDetail() {
           </p>
         )}
 
-        {/* Sales Lead Info */}
-        {(project.sales_rep || project.lead_source || project.estimated_value) && (
-          <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 p-4 bg-muted/30 rounded-xl border border-border">
-            <p className="w-full text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5 mb-1">
-              <TrendingUp className="w-3.5 h-3.5" /> Sales Lead
-            </p>
-            {project.sales_rep && (
-              <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                <User className="w-3.5 h-3.5" /> {project.sales_rep}
-              </span>
-            )}
-            {project.lead_source && (
-              <span className="flex items-center gap-1.5 text-sm text-muted-foreground capitalize">
-                Source: {project.lead_source.replace('_', ' ')}
-              </span>
-            )}
-            {project.estimated_value && (
-              <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                <DollarSign className="w-3.5 h-3.5" /> Est. {project.estimated_value}
-              </span>
-            )}
-            {project.lead_date && (
-              <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                <Calendar className="w-3.5 h-3.5" /> {project.lead_date}
-              </span>
-            )}
-          </div>
-        )}
-
         {/* Quick Stats */}
         <div className="flex gap-4 mt-5">
           <div className="flex items-center gap-1.5 text-sm">
@@ -196,18 +168,26 @@ export default function ProjectDetail() {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="photos">
+      <Tabs defaultValue="sales-lead">
         <TabsList className="mb-6 flex-wrap h-auto gap-1">
+          <TabsTrigger value="sales-lead"><TrendingUp className="w-3.5 h-3.5 mr-1.5" />Sales Lead</TabsTrigger>
+          <TabsTrigger value="job-files"><FolderOpen className="w-3.5 h-3.5 mr-1.5" />Job Files</TabsTrigger>
           <TabsTrigger value="photos"><Camera className="w-3.5 h-3.5 mr-1.5" />Photos</TabsTrigger>
           <TabsTrigger value="punch"><ClipboardCheck className="w-3.5 h-3.5 mr-1.5" />Punch List</TabsTrigger>
           <TabsTrigger value="plans"><FileText className="w-3.5 h-3.5 mr-1.5" />Plans</TabsTrigger>
           <TabsTrigger value="purchase-orders"><ShoppingCart className="w-3.5 h-3.5 mr-1.5" />Purchase Orders</TabsTrigger>
           <TabsTrigger value="selections"><Palette className="w-3.5 h-3.5 mr-1.5" />Selections</TabsTrigger>
           <TabsTrigger value="schedule"><CalendarDays className="w-3.5 h-3.5 mr-1.5" />Schedule</TabsTrigger>
-          <TabsTrigger value="job-files"><Paperclip className="w-3.5 h-3.5 mr-1.5" />Job Files</TabsTrigger>
         </TabsList>
 
-        {/* Photos Tab */}
+        <TabsContent value="sales-lead">
+          <SalesLeadTab project={project} onSaved={refreshProject} />
+        </TabsContent>
+
+        <TabsContent value="job-files">
+          <JobFilesTab projectId={id} />
+        </TabsContent>
+
         <TabsContent value="photos">
           <div className="flex justify-end mb-4">
             <Button size="sm" onClick={() => setPhotoOpen(true)}>
@@ -226,7 +206,6 @@ export default function ProjectDetail() {
           )}
         </TabsContent>
 
-        {/* Punch List Tab */}
         <TabsContent value="punch">
           <div className="flex justify-end mb-4">
             <Button size="sm" onClick={() => { setEditingPunch(null); setPunchOpen(true); }}>
@@ -270,10 +249,6 @@ export default function ProjectDetail() {
 
         <TabsContent value="schedule">
           <ScheduleTab projectId={id} />
-        </TabsContent>
-
-        <TabsContent value="job-files">
-          <JobFilesTab projectId={id} />
         </TabsContent>
       </Tabs>
 

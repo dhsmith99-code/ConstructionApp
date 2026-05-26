@@ -6,38 +6,28 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import EmptyState from '@/components/EmptyState';
-import { Paperclip, Plus, Trash2, ExternalLink, FileText, FileCheck, FileSignature, Shield, ClipboardList } from 'lucide-react';
+import { FolderOpen, Plus, Trash2, ExternalLink, FileCheck, Receipt, FilePen, File, Shield, ClipboardList } from 'lucide-react';
 
 const CATEGORIES = [
-  { value: 'contract',     label: 'Contract',        icon: FileSignature },
-  { value: 'permit',       label: 'Permit',           icon: FileCheck },
-  { value: 'insurance',    label: 'Insurance',        icon: Shield },
-  { value: 'change_order', label: 'Change Order',     icon: ClipboardList },
-  { value: 'inspection',   label: 'Inspection',       icon: FileCheck },
-  { value: 'other',        label: 'Other',            icon: FileText },
+  { value: 'contract',     label: 'Contract',      icon: FileCheck },
+  { value: 'permit',       label: 'Permit',         icon: FilePen },
+  { value: 'insurance',    label: 'Insurance',      icon: Shield },
+  { value: 'invoice',      label: 'Invoice',        icon: Receipt },
+  { value: 'change_order', label: 'Change Order',   icon: ClipboardList },
+  { value: 'inspection',   label: 'Inspection',     icon: FileCheck },
+  { value: 'other',        label: 'Other',          icon: File },
 ];
 
-const CATEGORY_COLORS = {
-  contract:     'bg-blue-100 text-blue-800',
-  permit:       'bg-purple-100 text-purple-800',
-  insurance:    'bg-emerald-100 text-emerald-800',
-  change_order: 'bg-amber-100 text-amber-800',
-  inspection:   'bg-orange-100 text-orange-800',
-  other:        'bg-muted text-muted-foreground',
-};
-
-const EMPTY = { name: '', file_url: '', category: 'other', notes: '' };
-
-function JobFileDialog({ open, onOpenChange, projectId, onSaved }) {
-  const [form, setForm] = useState(EMPTY);
+function AddFileDialog({ open, onOpenChange, projectId, onSaved }) {
+  const [form, setForm] = useState({ name: '', category: 'contract', file_url: '', notes: '' });
   const [saving, setSaving] = useState(false);
 
   React.useEffect(() => {
-    if (open) setForm(EMPTY);
+    if (open) setForm({ name: '', category: 'contract', file_url: '', notes: '' });
   }, [open]);
 
-  const set = (f) => (e) => setForm((s) => ({ ...s, [f]: e.target.value }));
-  const setV = (f) => (v) => setForm((s) => ({ ...s, [f]: v }));
+  const set = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
+  const setVal = (field) => (val) => setForm((f) => ({ ...f, [field]: val }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,14 +50,14 @@ function JobFileDialog({ open, onOpenChange, projectId, onSaved }) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-1.5">
             <label className="text-sm font-medium">File Name *</label>
-            <Input value={form.name} onChange={set('name')} placeholder="e.g. Signed Contract, Building Permit" required />
+            <Input value={form.name} onChange={set('name')} placeholder="e.g. Signed Contract — Smith Residence" required />
           </div>
           <div className="space-y-1.5">
             <label className="text-sm font-medium">Category</label>
-            <Select value={form.category} onValueChange={setV('category')}>
+            <Select value={form.category} onValueChange={setVal('category')}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
-                {CATEGORIES.map(c => (
+                {CATEGORIES.map((c) => (
                   <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
                 ))}
               </SelectContent>
@@ -75,11 +65,11 @@ function JobFileDialog({ open, onOpenChange, projectId, onSaved }) {
           </div>
           <div className="space-y-1.5">
             <label className="text-sm font-medium">File URL</label>
-            <Input value={form.file_url} onChange={set('file_url')} placeholder="https://drive.google.com/... or Dropbox link" />
+            <Input value={form.file_url} onChange={set('file_url')} placeholder="https://drive.google.com/… or Dropbox link" />
           </div>
           <div className="space-y-1.5">
             <label className="text-sm font-medium">Notes</label>
-            <Input value={form.notes} onChange={set('notes')} placeholder="Version, date signed, etc." />
+            <Input value={form.notes} onChange={set('notes')} placeholder="Optional notes about this file…" />
           </div>
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
@@ -109,7 +99,7 @@ export default function JobFilesTab({ projectId }) {
   };
 
   const grouped = CATEGORIES.reduce((acc, cat) => {
-    const items = files.filter(f => f.category === cat.value);
+    const items = files.filter((f) => f.category === cat.value);
     if (items.length) acc[cat.value] = { ...cat, items };
     return acc;
   }, {});
@@ -124,7 +114,7 @@ export default function JobFilesTab({ projectId }) {
 
       {files.length === 0 ? (
         <EmptyState
-          icon={Paperclip}
+          icon={FolderOpen}
           title="No job files yet"
           description="Store contracts, permits, insurance docs, and other important files here."
           action={<Button size="sm" onClick={() => setDialogOpen(true)}><Plus className="w-4 h-4 mr-1" />Add File</Button>}
@@ -137,10 +127,10 @@ export default function JobFilesTab({ projectId }) {
                 <Icon className="w-3.5 h-3.5" /> {label}
               </h4>
               <div className="space-y-2">
-                {items.map(file => (
+                {items.map((file) => (
                   <div key={file.id} className="flex items-center gap-3 p-4 bg-card rounded-xl border border-border">
                     <div className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center shrink-0">
-                      <Paperclip className="w-4 h-4 text-muted-foreground" />
+                      <Icon className="w-4 h-4 text-muted-foreground" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">{file.name}</p>
@@ -154,12 +144,7 @@ export default function JobFilesTab({ projectId }) {
                           </a>
                         </Button>
                       )}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-destructive hover:text-destructive"
-                        onClick={() => handleDelete(file)}
-                      >
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive" onClick={() => handleDelete(file)}>
                         <Trash2 className="w-3.5 h-3.5" />
                       </Button>
                     </div>
@@ -171,7 +156,7 @@ export default function JobFilesTab({ projectId }) {
         </div>
       )}
 
-      <JobFileDialog open={dialogOpen} onOpenChange={setDialogOpen} projectId={projectId} onSaved={refresh} />
+      <AddFileDialog open={dialogOpen} onOpenChange={setDialogOpen} projectId={projectId} onSaved={refresh} />
     </div>
   );
 }
