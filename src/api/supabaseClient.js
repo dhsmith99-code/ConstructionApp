@@ -75,5 +75,6 @@ export const db = {
     PurchaseOrder: makeEntity('purchase_orders'),
     Selection: makeEntity('selections'),
     ScheduleTask: makeEntity('schedule_tasks'),
+    JobFile: makeEntity('job_files'),
   },
 };

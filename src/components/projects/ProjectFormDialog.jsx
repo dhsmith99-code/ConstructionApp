@@ -19,7 +19,10 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-const EMPTY = { name: '', status: 'planning', client: '', address: '', budget: '', notes: '' };
+const EMPTY = {
+  name: '', status: 'planning', client: '', address: '', budget: '', notes: '',
+  sales_rep: '', lead_source: '', lead_date: '', estimated_value: '', sales_notes: '',
+};
 
 export default function ProjectFormDialog({ open, onOpenChange, project, onSaved }) {
   const [form, setForm] = useState(EMPTY);
@@ -35,6 +38,11 @@ export default function ProjectFormDialog({ open, onOpenChange, project, onSaved
         address: project.address || '',
         budget: project.budget || '',
         notes: project.notes || '',
+        sales_rep: project.sales_rep || '',
+        lead_source: project.lead_source || '',
+        lead_date: project.lead_date || '',
+        estimated_value: project.estimated_value || '',
+        sales_notes: project.sales_notes || '',
       });
     } else {
       setForm(EMPTY);
@@ -107,6 +115,50 @@ export default function ProjectFormDialog({ open, onOpenChange, project, onSaved
             <label className="text-sm font-medium">Notes</label>
             <Textarea value={form.notes} onChange={set('notes')} placeholder="Any additional notes…" rows={3} />
           </div>
+
+          {/* Sales Lead Section */}
+          <div className="border-t border-border pt-4">
+            <p className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Sales Lead</p>
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium">Sales Rep</label>
+                  <Input value={form.sales_rep} onChange={set('sales_rep')} placeholder="Rep name" />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium">Lead Source</label>
+                  <Select value={form.lead_source} onValueChange={setVal('lead_source')}>
+                    <SelectTrigger><SelectValue placeholder="Select source…" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="">None</SelectItem>
+                      <SelectItem value="referral">Referral</SelectItem>
+                      <SelectItem value="website">Website</SelectItem>
+                      <SelectItem value="repeat_client">Repeat Client</SelectItem>
+                      <SelectItem value="cold_call">Cold Call</SelectItem>
+                      <SelectItem value="social_media">Social Media</SelectItem>
+                      <SelectItem value="yard_sign">Yard Sign</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium">Lead Date</label>
+                  <Input type="date" value={form.lead_date} onChange={set('lead_date')} />
+                </div>
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium">Estimated Value</label>
+                  <Input value={form.estimated_value} onChange={set('estimated_value')} placeholder="e.g. $50,000" />
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium">Sales Notes</label>
+                <Textarea value={form.sales_notes} onChange={set('sales_notes')} placeholder="Lead details, follow-up notes…" rows={2} />
+              </div>
+            </div>
+          </div>
+
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
