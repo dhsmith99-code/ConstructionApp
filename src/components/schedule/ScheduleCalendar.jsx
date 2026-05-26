@@ -23,6 +23,7 @@ function contrastColor(hex) {
 
 export default function ScheduleCalendar({ tasks, onTaskDrop, onDayClick, onTaskClick }) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [dragOverDate, setDragOverDate] = useState(null);
   const dragTaskRef = useRef(null);
 
   const monthStart = startOfMonth(currentMonth);
@@ -51,22 +52,47 @@ export default function ScheduleCalendar({ tasks, onTaskDrop, onDayClick, onTask
     }
   });
 
+  // Drag handlers
   const handleDragStart = (e, task) => {
     dragTaskRef.current = task;
     e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', task.id); // required by Firefox & most browsers
+  };
+
+  const handleDragEnd = () => {
+    dragTaskRef.current = null;
+    setDragOverDate(null);
+  };
+
+  const handleDragOver = (e, dateKey) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverDate(dateKey);
+  };
+
+  const handleDragLeave = (e) => {
+    // Only clear if leaving the cell entirely (not moving over a child)
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setDragOverDate(null);
+    }
   };
 
   const handleDrop = (e, date) => {
     e.preventDefault();
+    e.stopPropagation();
+    setDragOverDate(null);
     if (!dragTaskRef.current) return;
     const dateStr = format(date, 'yyyy-MM-dd');
     onTaskDrop(dragTaskRef.current, dateStr);
     dragTaskRef.current = null;
   };
 
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
+  const handleTaskClick = (e, task) => {
+    e.stopPropagation();
+    if (!onTaskClick) return;
+    // Strip internal calendar fields before passing back up
+    const { _dayIndex, _isFirst, _isLast, ...cleanTask } = task;
+    onTaskClick(cleanTask);
   };
 
   const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -102,6 +128,7 @@ export default function ScheduleCalendar({ tasks, onTaskDrop, onDayClick, onTask
           const dayTasks = tasksByDay[dateKey] || [];
           const isCurrentMonth = isSameMonth(d, currentMonth);
           const isToday = isSameDay(d, new Date());
+          const isDragOver = dragOverDate === dateKey;
 
           return (
             <div
@@ -110,10 +137,12 @@ export default function ScheduleCalendar({ tasks, onTaskDrop, onDayClick, onTask
                 'border-r border-b min-h-[90px] p-1 cursor-pointer transition-colors',
                 !isCurrentMonth && 'bg-muted/30',
                 isToday && 'bg-accent/10',
+                isDragOver && 'bg-primary/10 ring-2 ring-inset ring-primary/30',
               )}
-              onDragOver={handleDragOver}
+              onDragOver={(e) => handleDragOver(e, dateKey)}
+              onDragLeave={handleDragLeave}
               onDrop={(e) => handleDrop(e, d)}
-              onClick={() => onDayClick && onDayClick(format(d, 'yyyy-MM-dd'))}
+              onClick={() => onDayClick && onDayClick(dateKey)}
             >
               <div className={cn(
                 'text-xs font-medium mb-1 w-6 h-6 flex items-center justify-center rounded-full',
@@ -132,16 +161,17 @@ export default function ScheduleCalendar({ tasks, onTaskDrop, onDayClick, onTask
                       key={`${task.id}-${ti}`}
                       draggable={task._isFirst}
                       onDragStart={task._isFirst ? (e) => handleDragStart(e, task) : undefined}
-                      onClick={(e) => { e.stopPropagation(); onTaskClick && onTaskClick(task); }}
+                      onDragEnd={task._isFirst ? handleDragEnd : undefined}
+                      onClick={(e) => handleTaskClick(e, task)}
                       className={cn(
-                        'text-xs px-1.5 py-0.5 rounded truncate cursor-grab active:cursor-grabbing',
-                        task._isFirst ? 'rounded-l-full' : 'rounded-l-none',
+                        'text-xs px-1.5 py-0.5 truncate',
+                        task._isFirst ? 'rounded-l-full cursor-grab active:cursor-grabbing' : 'rounded-l-none cursor-pointer',
                         task._isLast ? 'rounded-r-full' : 'rounded-r-none',
                       )}
                       style={{ backgroundColor: color, color: textColor }}
                       title={task.title}
                     >
-                      {task._isFirst ? task.title : ''}
+                      {task._isFirst ? task.title : ' '}
                     </div>
                   );
                 })}
