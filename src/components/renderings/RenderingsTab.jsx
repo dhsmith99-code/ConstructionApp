@@ -85,13 +85,13 @@ function buildPromptFromProject({ roomLabel, planDescription, planText, selectio
   const room = roomLabel || 'interior room';
   parts.push(`photorealistic interior design rendering of a ${style ? style + ' style ' : ''}${room}`);
 
-  // Materials from selections — most important part
+  // Materials from selections — use item name only (keeps prompt short)
   if (selections.length > 0) {
     const grouped = {};
     selections.forEach(s => {
       const cat = (s.category || 'Material').toLowerCase();
       if (!grouped[cat]) grouped[cat] = [];
-      grouped[cat].push([s.item, s.notes].filter(Boolean).join(' — '));
+      grouped[cat].push(s.item || '');
     });
 
     // Map common category names to render-friendly descriptions
@@ -346,24 +346,21 @@ export default function RenderingsTab({ projectId }) {
   const finalPrompt = promptOverride || builtPrompt;
 
   const handleGenerate = async () => {
+    if (!roomLabel.trim()) {
+      alert('Please select or enter a room name first.');
+      return;
+    }
     setGenerating(true);
     const seed = Math.floor(Math.random() * 9_999_999);
     const imageUrl = buildImageUrl(finalPrompt, seed);
 
     try {
-      await new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = resolve;
-        img.onerror = reject;
-        img.src = imageUrl;
-      });
-
       await base44.entities.Rendering.create({
         project_id: projectId,
         room_type: roomLabel || (selectedPlan ? selectedPlan.name : 'Room'),
         style,
         color_palette: '',
-        features: activeSelections.map(s => `${s.category}: ${s.item}`).join(' | '),
+        features: activeSelections.slice(0, 20).map(s => `${s.category}: ${s.item}`).join(' | '),
         custom_notes: customNotes,
         image_url: imageUrl,
         seed,
@@ -372,7 +369,8 @@ export default function RenderingsTab({ projectId }) {
 
       qc.invalidateQueries({ queryKey: ['renderings', projectId] });
     } catch (e) {
-      alert('Generation failed or timed out. Please try again.');
+      console.error('Rendering save error:', e);
+      alert('Failed to save rendering. Please try again.');
     } finally {
       setGenerating(false);
     }
