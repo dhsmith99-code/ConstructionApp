@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { db as base44 } from '@/api/supabaseClient';
 import { Button } from '@/components/ui/button';
@@ -63,7 +63,7 @@ export default function ScheduleTab({ projectId }) {
   return (
     <div className="space-y-6">
       {/* Calendar View */}
-      <div className="bg-card rounded-xl border border-border p-4">
+      <div className="bg-card rounded-none border border-border p-4">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-serif text-lg font-semibold">Calendar</h3>
           <Button size="sm" onClick={() => openNew()}>
@@ -91,16 +91,16 @@ export default function ScheduleTab({ projectId }) {
         ) : (
           <div className="space-y-2">
             {tasks.map((task) => (
-              <div key={task.id} className="flex items-center gap-3 p-4 bg-card rounded-xl border border-border">
+              <div key={task.id} className="flex items-center gap-3 p-4 bg-card rounded-none border border-border">
                 <div
-                  className="w-3 h-3 rounded-full shrink-0"
+                  className="w-3 h-3 rounded-none shrink-0"
                   style={{ backgroundColor: task.color || '#FBBF24' }}
                 />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className="text-sm font-medium">{task.title}</p>
                     {task.trade && task.trade !== 'general' && (
-                      <span className="text-xs px-2 py-0.5 rounded-full bg-muted text-muted-foreground capitalize">
+                      <span className="text-xs px-2 py-0.5 rounded-none bg-muted text-muted-foreground capitalize">
                         {task.trade}
                       </span>
                     )}

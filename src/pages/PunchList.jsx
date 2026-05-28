@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+﻿import React, { useState, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { db as base44 } from '@/api/supabaseClient';
 import PageHeader from '@/components/PageHeader';
@@ -80,13 +80,13 @@ export default function PunchList() {
 
       <div className="flex flex-wrap items-center gap-3 mb-6">
         {/* Tab Switcher */}
-        <div className="flex rounded-lg border border-border bg-muted p-1">
+        <div className="flex rounded-none border border-border bg-muted p-1">
           {TABS.map(({ key, label }) => (
             <button
               key={key}
               onClick={() => setTab(key)}
               className={cn(
-                'px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+                'px-3 py-1.5 rounded-none text-sm font-medium transition-colors',
                 tab === key
                   ? 'bg-background text-foreground shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
@@ -94,7 +94,7 @@ export default function PunchList() {
             >
               {label}
               {key === 'open' && openCount > 0 && (
-                <span className="ml-1.5 text-xs bg-primary text-primary-foreground rounded-full px-1.5 py-0.5">
+                <span className="ml-1.5 text-xs bg-primary text-primary-foreground rounded-none px-1.5 py-0.5">
                   {openCount}
                 </span>
               )}
@@ -120,7 +120,7 @@ export default function PunchList() {
 
       {isLoading ? (
         <div className="space-y-3">
-          {[1, 2, 3].map((i) => <div key={i} className="h-20 rounded-xl bg-muted animate-pulse" />)}
+          {[1, 2, 3].map((i) => <div key={i} className="h-20 rounded-none bg-muted animate-pulse" />)}
         </div>
       ) : filtered.length === 0 ? (
         <EmptyState

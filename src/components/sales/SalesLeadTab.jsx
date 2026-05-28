@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { db as base44 } from '@/api/supabaseClient';
 import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
@@ -30,7 +30,7 @@ function InfoRow({ icon: Icon, label, value }) {
   if (!value) return null;
   return (
     <div className="flex items-start gap-3">
-      <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center shrink-0 mt-0.5">
+      <div className="w-8 h-8 rounded-none bg-muted flex items-center justify-center shrink-0 mt-0.5">
         <Icon className="w-4 h-4 text-muted-foreground" />
       </div>
       <div>
@@ -167,12 +167,12 @@ export default function SalesLeadTab({ project, onSaved }) {
         <div className="space-y-5 max-w-2xl">
           {statusObj && (
             <div className="flex items-center gap-2">
-              <span className={`text-sm px-3 py-1 rounded-full font-medium ${statusObj.color}`}>
+              <span className={`text-sm px-3 py-1 rounded-none font-medium ${statusObj.color}`}>
                 {statusObj.label}
               </span>
             </div>
           )}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5 bg-muted/40 rounded-xl">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-5 bg-muted/40 rounded-none">
             <InfoRow icon={User} label="Salesperson" value={project.salesperson} />
             <InfoRow icon={Tag} label="Lead Source" value={project.lead_source} />
             <InfoRow icon={DollarSign} label="Estimated Value" value={project.estimated_value} />
@@ -180,8 +180,8 @@ export default function SalesLeadTab({ project, onSaved }) {
             <InfoRow icon={Mail} label="Contact Email" value={project.contact_email} />
           </div>
           {project.lead_notes && (
-            <div className="flex items-start gap-3 p-4 bg-muted/40 rounded-xl">
-              <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center shrink-0 mt-0.5">
+            <div className="flex items-start gap-3 p-4 bg-muted/40 rounded-none">
+              <div className="w-8 h-8 rounded-none bg-muted flex items-center justify-center shrink-0 mt-0.5">
                 <StickyNote className="w-4 h-4 text-muted-foreground" />
               </div>
               <div>

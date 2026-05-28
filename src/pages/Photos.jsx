@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+﻿import React, { useState, useMemo } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { db as base44 } from '@/api/supabaseClient';
 import PageHeader from '@/components/PageHeader';
@@ -64,7 +64,7 @@ export default function Photos() {
       {isLoading ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="aspect-square rounded-xl bg-muted animate-pulse" />
+            <div key={i} className="aspect-square rounded-none bg-muted animate-pulse" />
           ))}
         </div>
       ) : filtered.length === 0 ? (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { db as base44 } from '@/api/supabaseClient';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,8 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog';
 import EmptyState from '@/components/EmptyState';
-import { FileText, Plus, Trash2, ExternalLink } from 'lucide-react';
+import PlanOverlayViewer from './PlanOverlayViewer';
+import { FileText, Plus, Trash2, ExternalLink, Layers } from 'lucide-react';
 
 function PlanDialog({ open, onOpenChange, projectId, onSaved }) {
   const [form, setForm] = useState({ name: '', file_url: '', description: '' });
@@ -74,6 +75,7 @@ function PlanDialog({ open, onOpenChange, projectId, onSaved }) {
 
 export default function PlansTab({ projectId }) {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [overlayOpen, setOverlayOpen] = useState(false);
   const qc = useQueryClient();
 
   const { data: plans = [] } = useQuery({
@@ -91,7 +93,12 @@ export default function PlansTab({ projectId }) {
 
   return (
     <div>
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-end gap-2 mb-4">
+        {plans.length >= 2 && (
+          <Button size="sm" variant="outline" onClick={() => setOverlayOpen(true)}>
+            <Layers className="w-4 h-4 mr-1.5" /> Overlay Plans
+          </Button>
+        )}
         <Button size="sm" onClick={() => setDialogOpen(true)}>
           <Plus className="w-4 h-4 mr-1.5" /> Add Plan
         </Button>
@@ -107,8 +114,8 @@ export default function PlansTab({ projectId }) {
       ) : (
         <div className="space-y-2">
           {plans.map((plan) => (
-            <div key={plan.id} className="flex items-center gap-3 p-4 bg-card rounded-xl border border-border">
-              <div className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center shrink-0">
+            <div key={plan.id} className="flex items-center gap-3 p-4 bg-card rounded-none border border-border">
+              <div className="w-9 h-9 rounded-none bg-muted flex items-center justify-center shrink-0">
                 <FileText className="w-4 h-4 text-muted-foreground" />
               </div>
               <div className="flex-1 min-w-0">
@@ -138,6 +145,13 @@ export default function PlansTab({ projectId }) {
       )}
 
       <PlanDialog open={dialogOpen} onOpenChange={setDialogOpen} projectId={projectId} onSaved={refresh} />
+
+      {overlayOpen && (
+        <PlanOverlayViewer
+          plans={plans}
+          onClose={() => setOverlayOpen(false)}
+        />
+      )}
     </div>
   );
 }

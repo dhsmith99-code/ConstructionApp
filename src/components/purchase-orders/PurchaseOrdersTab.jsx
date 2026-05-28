@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { db as base44 } from '@/api/supabaseClient';
 import { Button } from '@/components/ui/button';
@@ -126,11 +126,11 @@ export default function PurchaseOrdersTab({ projectId }) {
       ) : (
         <div className="space-y-2">
           {pos.map((po) => (
-            <div key={po.id} className="flex items-center gap-3 p-4 bg-card rounded-xl border border-border">
+            <div key={po.id} className="flex items-center gap-3 p-4 bg-card rounded-none border border-border">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
                   <p className="text-sm font-medium">{po.vendor}</p>
-                  <span className={cn('text-xs px-2 py-0.5 rounded-full font-medium', STATUS_COLORS[po.status] || 'bg-muted text-muted-foreground')}>
+                  <span className={cn('text-xs px-2 py-0.5 rounded-none font-medium', STATUS_COLORS[po.status] || 'bg-muted text-muted-foreground')}>
                     {po.status}
                   </span>
                 </div>

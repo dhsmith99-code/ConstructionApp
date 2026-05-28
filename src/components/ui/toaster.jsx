@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 import { X } from 'lucide-react';
@@ -12,7 +12,7 @@ export function Toaster() {
         <div
           key={t.id}
           className={cn(
-            'pointer-events-auto flex items-start gap-3 rounded-xl border p-4 shadow-lg transition-all',
+            'pointer-events-auto flex items-start gap-3 rounded-none border p-4 shadow-lg transition-all',
             t.open ? 'animate-in slide-in-from-bottom-5' : 'animate-out slide-out-to-right-5 opacity-0',
             t.variant === 'destructive'
               ? 'bg-destructive text-destructive-foreground border-destructive'

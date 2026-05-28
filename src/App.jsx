@@ -4,6 +4,7 @@ import { queryClientInstance } from '@/lib/query-client';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
+import { RoleProvider } from '@/lib/RoleContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import Layout from '@/components/Layout';
 import Dashboard from '@/pages/Dashboard';
@@ -11,6 +12,7 @@ import Projects from '@/pages/Projects';
 import ProjectDetail from '@/pages/ProjectDetail';
 import Photos from '@/pages/Photos';
 import PunchList from '@/pages/PunchList';
+import SalesLeads from '@/pages/SalesLeads';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError } = useAuth();
@@ -35,6 +37,7 @@ const AuthenticatedApp = () => {
         <Route path="projects/:id" element={<ProjectDetail />} />
         <Route path="photos" element={<Photos />} />
         <Route path="punch-list" element={<PunchList />} />
+        <Route path="sales-leads" element={<SalesLeads />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
@@ -46,8 +49,10 @@ export default function App() {
     <QueryClientProvider client={queryClientInstance}>
       <Router>
         <AuthProvider>
-          <AuthenticatedApp />
-          <Toaster />
+          <RoleProvider>
+            <AuthenticatedApp />
+            <Toaster />
+          </RoleProvider>
         </AuthProvider>
       </Router>
     </QueryClientProvider>

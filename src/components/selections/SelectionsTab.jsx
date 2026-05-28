@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { db as base44 } from '@/api/supabaseClient';
 import { Button } from '@/components/ui/button';
@@ -125,11 +125,11 @@ export default function SelectionsTab({ projectId }) {
               <h4 className="font-serif text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-2">{cat}</h4>
               <div className="space-y-2">
                 {items.map((sel) => (
-                  <div key={sel.id} className="flex items-start gap-3 p-4 bg-card rounded-xl border border-border">
+                  <div key={sel.id} className="flex items-start gap-3 p-4 bg-card rounded-none border border-border">
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
                         <p className="text-sm font-medium">{sel.item}</p>
-                        <span className={cn('text-xs px-2 py-0.5 rounded-full font-medium', STATUS_COLORS[sel.status] || 'bg-muted text-muted-foreground')}>{sel.status}</span>
+                        <span className={cn('text-xs px-2 py-0.5 rounded-none font-medium', STATUS_COLORS[sel.status] || 'bg-muted text-muted-foreground')}>{sel.status}</span>
                       </div>
                       {sel.notes && <p className="text-xs text-muted-foreground mt-0.5">{sel.notes}</p>}
                     </div>

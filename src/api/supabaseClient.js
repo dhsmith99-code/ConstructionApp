@@ -76,5 +76,6 @@ export const db = {
     Selection: makeEntity('selections'),
     ScheduleTask: makeEntity('schedule_tasks'),
     JobFile: makeEntity('job_files'),
+    Rendering: makeEntity('renderings'),
   },
 };

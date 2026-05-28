@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle2, Circle, Pencil, Trash2, User, FolderKanban } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -13,7 +13,7 @@ export default function PunchItemCard({ item, index = 0, projectName, onToggle, 
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.2, delay: index * 0.04 }}
       className={cn(
-        'bg-card rounded-xl border p-4 transition-colors',
+        'bg-card rounded-none border p-4 transition-colors',
         isComplete ? 'border-border opacity-70' : 'border-border hover:border-primary/30'
       )}
     >

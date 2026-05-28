@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { db as base44 } from '@/api/supabaseClient';
 import { useQueryClient } from '@tanstack/react-query';
 import { Trash2, X, ZoomIn } from 'lucide-react';
@@ -21,7 +21,7 @@ export default function PhotoGrid({ photos = [], onDeleted }) {
     <>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {photos.map((photo) => (
-          <div key={photo.id} className="group relative aspect-square rounded-xl overflow-hidden bg-muted">
+          <div key={photo.id} className="group relative aspect-square rounded-none overflow-hidden bg-muted">
             <img
               src={photo.url}
               alt={photo.caption || 'Site photo'}
@@ -71,7 +71,7 @@ export default function PhotoGrid({ photos = [], onDeleted }) {
           <img
             src={lightbox.url}
             alt={lightbox.caption || ''}
-            className="max-h-[90vh] max-w-full rounded-xl object-contain"
+            className="max-h-[90vh] max-w-full rounded-none object-contain"
             onClick={(e) => e.stopPropagation()}
           />
           {lightbox.caption && (

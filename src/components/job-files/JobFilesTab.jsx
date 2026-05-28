@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { db as base44 } from '@/api/supabaseClient';
 import { Button } from '@/components/ui/button';
@@ -128,8 +128,8 @@ export default function JobFilesTab({ projectId }) {
               </h4>
               <div className="space-y-2">
                 {items.map((file) => (
-                  <div key={file.id} className="flex items-center gap-3 p-4 bg-card rounded-xl border border-border">
-                    <div className="w-9 h-9 rounded-lg bg-muted flex items-center justify-center shrink-0">
+                  <div key={file.id} className="flex items-center gap-3 p-4 bg-card rounded-none border border-border">
+                    <div className="w-9 h-9 rounded-none bg-muted flex items-center justify-center shrink-0">
                       <Icon className="w-4 h-4 text-muted-foreground" />
                     </div>
                     <div className="flex-1 min-w-0">
